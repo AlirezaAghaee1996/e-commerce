@@ -29,7 +29,11 @@ const productSchema = new mongoose.Schema({
 });
 const OrderSchema=new mongoose.Schema({
     products: [productSchema],
-
+    orderStatus:{
+        type:String,
+        enum:['pending','paid'],
+        default:'pending'
+    },
     userId:{
         type:String,
         required: true
