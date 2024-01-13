@@ -60,5 +60,5 @@ ProductSchema.pre('save', function (next) {
     this.slug=slugify(this.name,{lower:true})
     next()
 })
-const Product=mongoose.model('product',ProductSchema)
+const Product=mongoose.model('Product',ProductSchema)
 export default Product
