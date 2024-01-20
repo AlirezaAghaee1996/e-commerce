@@ -21,7 +21,7 @@ const ProductSchema=new mongoose.Schema({
     }},
     shopkeeperId:{
         type:String,
-        required:[true,'user id is required']
+        required:[true,'shopkeeper id is required']
 
     },
     categoryId:{
@@ -60,5 +60,5 @@ ProductSchema.pre('save', function (next) {
     this.slug=slugify(this.name,{lower:true})
     next()
 })
-const Product=mongoose.model('Product',ProductSchema)
+const Product= mongoose.model('Product',ProductSchema)
 export default Product

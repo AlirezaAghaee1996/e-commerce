@@ -18,7 +18,7 @@ export const getAllUsers = catchAsync(async (req, res,next) => {
 });
 
 export const register =catchAsync( async (req, res,next) => {
-    const {password,role,...userInfo}= req.body;
+    const {password,role,shopkeeperConfirmed,...userInfo}= req.body;
     const hashedPassword = bcryptjs.hashSync(password, 10);
     const newUser = await User.create({password:hashedPassword,...userInfo});
     res.status(201).json({
@@ -51,7 +51,7 @@ export const login = catchAsync(async (req, res,next) => {
       success:true,
       data: {
         token,
-        username: validateUser.username,
+        username: validateUser.email,
       },
     });
   
@@ -95,3 +95,12 @@ export const deleteUser = catchAsync(async(req, res,next) => {
     return next(new HandleERROR("You do not have permission to perform this action on this account",401))
 });
 
+export const shopkeeperRegister=catchAsync(async(req,res,next)=>{
+  const {password,role,shopkeeperConfirmed,...userInfo}= req.body;
+    const hashedPassword = bcryptjs.hashSync(password, 10);
+    const newUser = await User.create({password:hashedPassword,role:'shopkeeper',...userInfo});
+    res.status(201).json({
+      success:true,
+      message: "Register successfully",
+    });
+})
