@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import slugify from 'slugify'
 const CategorySchema=new mongoose.Schema({
     name:{
         type:String,
