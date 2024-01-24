@@ -46,12 +46,13 @@ export const login = catchAsync(async (req, res,next) => {
         message: "email or password not correct",
       });
     }
-    const token = jwt.sign({ id: validateUser.id }, process.env.JWT_SECRET);
+    const {password:pw,...user}=validateUser
+    const token = jwt.sign({ id: validateUser.id,role:validateUser.role }, process.env.JWT_SECRET);
     res.status(200).json({
       success:true,
       data: {
         token,
-        username: validateUser.email,
+        user
       },
     });
   

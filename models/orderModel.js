@@ -25,7 +25,7 @@ const productSchema = new mongoose.Schema({
     productImage: {
         type: String,
         required: true
-    }
+    },
 });
 const OrderSchema=new mongoose.Schema({
     products: [productSchema],
@@ -38,9 +38,6 @@ const OrderSchema=new mongoose.Schema({
         type:String,
         required: true
     },
-    shopkeeperId:{
-        type:String,
-    },
     orderDate: {
         type: Date,
         default: Date.now
@@ -52,7 +49,7 @@ const OrderSchema=new mongoose.Schema({
 })
 OrderSchema.pre('save', function (next) {
     let total=0
-    this.products.map(e=>{
+    this.products?.map(e=>{
         total+= e.priceDiscount?e.priceDiscount*e.quantity:e.productPrice*e.quantity
     })
     this.totalAmount=total
