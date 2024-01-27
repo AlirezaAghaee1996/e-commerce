@@ -40,6 +40,10 @@ const UserSchema=new mongoose.Schema({
     shopkeeperConfirmed:{
         type:Boolean,
         default:false
+    },
+    cart:{
+        type:Array,
+        default:[]
     }
 },{timestamp:true})
 

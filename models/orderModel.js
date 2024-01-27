@@ -1,38 +1,15 @@
 import mongoose from "mongoose";
 const mongoose = require('mongoose');
 
-const productSchema = new mongoose.Schema({
-    productId: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    quantity:{
-        type:Number,
-        default:1,
-    },
-    productName: {
-        type: String,
-        required: true
-    },
-    productPrice: {
-        type: Number,
-        required: true
-    },
-    priceDiscount:{
-        type:Number
-    },
-    productImage: {
-        type: String,
-        required: true
-    },
-});
+
 const OrderSchema=new mongoose.Schema({
-    products: [productSchema],
+    orderList:{
+        type:Array,
+        required:true
+    },
     orderStatus:{
         type:String,
-        enum:['pending','paid'],
-        default:'pending'
+        enum:['failed','paid'],
     },
     userId:{
         type:String,
@@ -40,7 +17,7 @@ const OrderSchema=new mongoose.Schema({
     },
     orderDate: {
         type: Date,
-        default: Date.now
+        default: Date.now()
     },
     totalAmount: {
         type: Number,
@@ -49,7 +26,7 @@ const OrderSchema=new mongoose.Schema({
 })
 OrderSchema.pre('save', function (next) {
     let total=0
-    this.products?.map(e=>{
+    this.orderList?.map(e=>{
         total+= e.priceDiscount?e.priceDiscount*e.quantity:e.productPrice*e.quantity
     })
     this.totalAmount=total
