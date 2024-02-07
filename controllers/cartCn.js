@@ -24,10 +24,10 @@ export const  addToCart = catchAsync(async(req, res, next) => {
         let newCart=cart?.filter((e)=>{
             if(e.productId==req.body.productId){
                 e.quantity=parseInt(req.body.quantity)
-                if(e.quantity<=0){
+                productInCart=true
+                if(+e.quantity<=0){
                     return false
                 }
-                productInCart=true
                 return e
             }
             return e
@@ -52,8 +52,23 @@ export const  addToCart = catchAsync(async(req, res, next) => {
 export const getCartItem=catchAsync(async(req,res,next)=>{
     const {id}=jwt.verify(req.headers['authorization'].split(' ')[1],process.env.JWT_SECRET)
     const {cart}=await User.findById(id)
+    let message;
+    const newCart=await cart?.map(async(e)=>{
+        const {quantity,name}=await Product.findById(e.productId)
+        if(quantity<=0){
+            e.quantity='-1'
+            message='product does not exist'
+            return e
+        }else if(quantity<e.quantity){
+            e.quantity=quantity
+            message=`only ${quantity} of ${name} exist`
+            return e
+        }
+    })
+    
     res.status(200).json({
         success:true,
-        cart,
+        message,
+        cart:newCart
     })
 })

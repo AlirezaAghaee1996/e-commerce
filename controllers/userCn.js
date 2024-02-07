@@ -32,7 +32,7 @@ export const register = catchAsync(async (req, res, next) => {
 });
 export const login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
-  const validateUser = await User.findOne({ email });
+  const validateUser = await User.findOne({ email }).select(['-token','-expireTimeToken']);
   if (!validateUser) {
     res.status(401).json({
       success: false,
@@ -58,21 +58,19 @@ export const login = catchAsync(async (req, res, next) => {
     expireTimeToken: String(expireTimeToken),
   });
   const smsResult = await otpSmsHandler(validateUser.phone, String(randomNum));
-  console.log(smsResult);
+  const {password:userPass,__v,...others}=user._doc
   res.status(200).json({
     success: true,
     message: "user and password correct",
     data: {
-      user,
+      user:others
     },
   });
 });
 export const otpCodeValidate = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ phone: req.body.phone })
-  console.log(user)
   const expire = new Date().getTime();
-  console.log(user.expireTimeToken)
-  console.log('now time',expire)
+ 
   if (+user.expireTimeToken > +expire) {
     if (req.body.otpNum == user.token) {
       const token = jwt.sign(
