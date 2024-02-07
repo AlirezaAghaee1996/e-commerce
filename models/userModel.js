@@ -14,6 +14,7 @@ const UserSchema=new mongoose.Schema({
     phone:{
         unique:true,
         type:String,
+        default:'',
         match:[/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,'phone invalid']
     },
     role:{
@@ -32,7 +33,9 @@ const UserSchema=new mongoose.Schema({
         type:String,
         minlength:[3,'address too short'],
         maxlength:[250,'address too long'],
-        trim:true
+        trim:true,
+        required:true,
+        default:'no address'
     },
     image:{
         type:String,
@@ -44,6 +47,12 @@ const UserSchema=new mongoose.Schema({
     cart:{
         type:Array,
         default:[]
+    },
+    token:{
+        type:String,
+    },
+    expireTimeToken:{
+        type:String,
     }
 },{timestamp:true})
 

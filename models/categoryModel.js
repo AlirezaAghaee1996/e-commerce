@@ -12,6 +12,9 @@ const CategorySchema=new mongoose.Schema({
     },
     subCategory:{
         type:[String]
+    },
+    slug:{
+        type:String
     }
     
 })

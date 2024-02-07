@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-const mongoose = require('mongoose');
 
 
 const OrderSchema=new mongoose.Schema({
@@ -9,7 +8,7 @@ const OrderSchema=new mongoose.Schema({
     },
     orderStatus:{
         type:String,
-        enum:['failed','paid'],
+        enum:['fail','paid'],
     },
     userId:{
         type:String,
@@ -21,7 +20,6 @@ const OrderSchema=new mongoose.Schema({
     },
     totalAmount: {
         type: Number,
-        required: true
     },
 })
 OrderSchema.pre('save', function (next) {
