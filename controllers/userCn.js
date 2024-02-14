@@ -51,7 +51,7 @@ export const login = catchAsync(async (req, res, next) => {
   }
   const { password: pw, ...user } = validateUser;
   // const token = jwt.sign({ id: validateUser.id,role:validateUser.role }, process.env.JWT_SECRET);
-  const randomNum = Math.trunc(Math.random() * 10 ** 6);
+  const randomNum = Math.trunc(Math.random() * (1000000 - 100000 + 1)) + 100000;
   const expireTimeToken = new Date().getTime() + 2 * 60 * 1000;
   await User.findByIdAndUpdate(validateUser.id, {
     token: randomNum,
