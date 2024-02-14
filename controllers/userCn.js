@@ -8,7 +8,7 @@ import adminCheck from "../middleware/adminCheck.js";
 import smsHandler, { otpSmsHandler } from "../utils/smsHandler.js";
 
 export const getAllUsers = catchAsync(async (req, res, next) => {
-  const isAdmin = adminCheck(req.headers.Authorization);
+  const isAdmin = adminCheck(req.headers.authorization);
   if (!isAdmin) {
     return next(new HandleERROR("You are not authorized to perform this", 401));
   }
@@ -99,9 +99,9 @@ export const otpCodeValidate = catchAsync(async (req, res, next) => {
 });
 export const updateProfile = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const accessToken = req.headers.Authorization.slice(" ")[1];
+  const accessToken = req.headers.authorization.split(" ")[1];
   const verifyId = jwt.verify(accessToken, process.env.JWT_SECRET).id;
-  const isAdmin = adminCheck(req.headers.Authorization);
+  const isAdmin = adminCheck(req.headers.authorization);
   if (isAdmin || id == verifyId) {
     if (req.body.role && !isAdmin) {
       return next(new HandleERROR("just admin can change role", 401));
@@ -123,9 +123,9 @@ export const updateProfile = catchAsync(async (req, res, next) => {
 });
 export const deleteUser = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const accessToken = req.headers.Authorization.slice(" ")[1];
+  const accessToken = req.headers.authorization.split(" ")[1];
   const verifyId = jwt.verify(accessToken, process.env.JWT_SECRET).id;
-  const isAdmin = adminCheck(req.headers.Authorization);
+  const isAdmin = adminCheck(req.headers.authorization);
   if (isAdmin || id == verifyId) {
     await User.findByIdAndDelete(id);
     res.status(201).json({
