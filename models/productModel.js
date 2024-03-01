@@ -1,64 +1,67 @@
 import mongoose from "mongoose";
 import slugify from "slugify";
-const ProductSchema=new mongoose.Schema({
-   name:{type:String,required:true},
-   description:{type:String},
-    images:{
-        type:[String],
-        required:[true,'image is required']
+const ProductSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    description: { type: String },
+    images: {
+      type: [String],
+      required: [true, "image is required"],
     },
-    price:{
-        type:Number,
-        required:true
+    price: {
+      type: Number,
+      required: true,
     },
-    discountPrice:{
-        type:Number,
-        validate:{
-            validator:function(value){
-            return this.price > value
+    discountPrice: {
+      type: Number,
+      validate: {
+        validator: function (value) {
+          return this.price > value;
         },
-        message:"discount price should be less than the original price"
-    }},
-    shopkeeperId:{
-        type:String,
-        required:[true,'shopkeeper id is required']
-
+        message: "discount price should be less than the original price",
+      },
     },
-    categoryId:{
-        type:[String],
-        required:[true,'category id is required']
-
+    shopkeeperId: {
+      type: String,
+      required: [true, "shopkeeper id is required"],
     },
-    quantity:{
-        type:Number,
-        validate:{
-            validator:function(value){
-            return value>=0
+    categoryId: {
+      type: [String],
+      required: [true, "category id is required"],
+    },
+    quantity: {
+      type: Number,
+      validate: {
+        validator: function (value) {
+          return value >= 0;
         },
-        message:'invalid quantity'
-    }
+        message: "invalid quantity",
+      },
     },
-    rating:{
-        type:[{
-            userId:String,
-            rate:Number
-        }],
+    rating: {
+      type: [
+        {
+          userId: String,
+          rate: Number,
+        },
+      ],
     },
-    startDiscountDate:{
-        type:Date,
+    startDiscountDate: {
+      type: Date,
     },
-    endDiscountDate:{
-        type:Date,
+    endDiscountDate: {
+      type: Date,
     },
-    slug:{
-        type:String
-    }
+    slug: {
+      type: String,
+    },
+  },
+  { timestamp: true }
+);
 
-},{timestamp:true})
-
-ProductSchema.pre('save', function (next) {
-    this.slug=slugify(this.name,{lower:true})
-    next()
-})
-const Product= mongoose.model('Product',ProductSchema)
-export default Product
+ProductSchema.pre("save", function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
+const Product = mongoose.model("Product", ProductSchema);
+export default Product;
